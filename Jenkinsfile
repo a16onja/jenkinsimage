@@ -1,16 +1,26 @@
 node {
-	def app
+	def registryProject='registry.gitlab.com/xavki/presentations-jenkins'
+	def IMAGE="${registryProject}:version-${env.BUILD_ID}"
+	
 	stage('Clone') {
-		checkout scm
+	    git credentialsId: 'onja', url: 'https://github.com/a16onja/jenkinsimage.git'
 	}
-	stage('Build image') {
-		app = docker.build("onja/nginx")
-	}
-	stage('Test image') {
-		docker.image('onja/nginx').withRun('-p 8008:80') { c ->
-			sh 'docker ps'
-			sh 'curl localhost'
-		}
-	}
+    
+    def img = stage('Build') {
+        docker.build("$IMAGE", '.')
+    }
+    
+    stage('Run') {
+        img.withRun("--name run-$BULD_ID -p 8070:80") { c ->
+            sh 'curl localhost:8070'
+        }
+    }
+    
+    stage('Push') {
+        docker.withRegistry('https://registry.gitlab.com', 'reg1') {
+            img.push 'latest'
+            img.push()
+        } 
+    }
 }
 
