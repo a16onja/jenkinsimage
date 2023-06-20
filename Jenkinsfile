@@ -9,7 +9,7 @@ node {
 	stage('Test image') {
 		docker.image('onja/nginx').withRun('-p 8069:80') { c ->
 			sh 'docker ps'
-			sh 'curl localhost'
+			sh 'curl localhost:8069'
 		}
 	}
 }
