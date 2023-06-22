@@ -11,7 +11,7 @@ node {
     }
     
     stage('Run') {
-        img.withRun("--name run-$BULD_ID -p 8070:80") { c ->
+        img.withRun("--name run-$BUILD_ID -p 8070:80") { c ->
             sh 'curl localhost:8070'
         }
     }
