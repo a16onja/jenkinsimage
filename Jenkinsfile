@@ -17,7 +17,7 @@ node {
     }
     
     stage('Push') {
-        docker.withRegistry('https://registry.gitlab.com', 'a16onja') {
+        docker.withRegistry('https://registry.gitlab.com/a16onja1/jenkins', 'a16onja') {
             img.push 'latest'
             img.push()
         } 
